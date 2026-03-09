@@ -8,9 +8,8 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 -- ===================== ç½ååç³»ç» =====================
 local whitelist = {
-    -- Whitelisted player names¨
-	"KoaIaIala",
-    "Kedada001",
+    -- ç½ååç¨æ·åè¡¨
+    "KoaIaIala",
     "zero456127",
     "g88714033"
 }
@@ -26,6 +25,7 @@ local function isWhitelisted(player)
     end
     return false
 end
+-- æ¾ç¤ºç½ååæç¤º
 local function showWhitelistWarning()
     local TweenService = game:GetService("TweenService")
     local whitelistGui = Instance.new("ScreenGui")
@@ -33,11 +33,13 @@ local function showWhitelistWarning()
     whitelistGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     whitelistGui.ResetOnSpawn = false
     whitelistGui.Parent = CoreGui
+    -- èæ¯é®ç½©
     local backgroundOverlay = Instance.new("Frame")
     backgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
     backgroundOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     backgroundOverlay.BackgroundTransparency = 0.7
     backgroundOverlay.Parent = whitelistGui
+    -- ä¸»çªå£
     local mainFrame = Instance.new("Frame")
     mainFrame.Name = "MainFrame"
     mainFrame.Size = UDim2.new(0, 450, 0, 250)
@@ -45,6 +47,7 @@ local function showWhitelistWarning()
     mainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 28)
     mainFrame.BorderSizePixel = 0
     mainFrame.Parent = whitelistGui
+    -- çªå£åè§
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = mainFrame
@@ -80,7 +83,7 @@ local function showWhitelistWarning()
     titleLabel.Size = UDim2.new(1, -40, 0, 30)
     titleLabel.Position = UDim2.new(0, 20, 0, 90)
     titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = "éè¦ç½åå"
+    titleLabel.Text = "Need whitelist"
     titleLabel.Font = Enum.Font.SourceSansBold
     titleLabel.TextSize = 40
     titleLabel.TextColor3 = Color3.fromRGB(60, 120, 220)
@@ -92,7 +95,7 @@ local function showWhitelistWarning()
     messageLabel.Size = UDim2.new(1, -40, 0, 60)
     messageLabel.Position = UDim2.new(0, 20, 0, 130)
     messageLabel.BackgroundTransparency = 1
-    messageLabel.Text = "éè¦ç½ååæè½ä½¿ç¨æ­¤èæ¬ï¼è¯·å å¥æçDiscordç¾¤ç»å¹¶æäº¤æ¨çIDã\ndiscord.gg/kPN2Szg5E"
+    messageLabel.Text = "A whitelist is required to use this script. Please join my Discord group and submit your ID. discord.gg/kPN2Szg5E"
     messageLabel.Font = Enum.Font.SourceSans
     messageLabel.TextSize = 25
     messageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -112,7 +115,7 @@ local function showWhitelistWarning()
     copyButton.Size = UDim2.new(0.45, 0, 1, 0)
     copyButton.Position = UDim2.new(0, 0, 0, 0)
     copyButton.BackgroundColor3 = Color3.fromRGB(60, 120, 220)
-    copyButton.Text = "å¤å¶é¾æ¥"
+    copyButton.Text = "Copy link"
     copyButton.Font = Enum.Font.SourceSansBold
     copyButton.TextSize = 35
     copyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -126,7 +129,7 @@ local function showWhitelistWarning()
     closeButton.Size = UDim2.new(0.45, 0, 1, 0)
     closeButton.Position = UDim2.new(0.55, 0, 0, 0)
     closeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 58)
-    closeButton.Text = "Close­"
+    closeButton.Text = "Close"
     closeButton.Font = Enum.Font.SourceSansBold
     closeButton.TextSize = 35
     closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -134,7 +137,7 @@ local function showWhitelistWarning()
     local closeCorner = Instance.new("UICorner")
     closeCorner.CornerRadius = UDim.new(0, 6)
     closeCorner.Parent = closeButton
-
+    -- å¨ç»ææ
     mainFrame.Size = UDim2.new(0, 0, 0, 0)
     infoIcon.Size = UDim2.new(0, 0, 0, 0)
     titleLabel.TextTransparency = 1
@@ -143,11 +146,11 @@ local function showWhitelistWarning()
     copyButton.TextTransparency = 1
     closeButton.BackgroundTransparency = 1
     closeButton.TextTransparency = 1
-
+    -- æ·¡å¥èæ¯
     TweenService:Create(backgroundOverlay, TweenInfo.new(0.3), {
         BackgroundTransparency = 0.7
     }):Play()
- 
+    -- çªå£å¼¹åºå¨ç»
     TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
         Size = UDim2.new(0, 450, 0, 250)
     }):Play()
@@ -207,7 +210,7 @@ local function showWhitelistWarning()
         local copyLabel = Instance.new("TextLabel")
         copyLabel.Size = UDim2.new(1, 0, 1, 0)
         copyLabel.BackgroundTransparency = 1
-        copyLabel.Text = "å·²å¤å¶é¾æ¥"
+        copyLabel.Text = "Link copied"
         copyLabel.Font = Enum.Font.SourceSansBold
         copyLabel.TextSize = 14
         copyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -246,7 +249,7 @@ local function checkWhitelist()
     if not localPlayer then return false end
     local isWhitelistedUser = isWhitelisted(localPlayer)
     if not isWhitelistedUser then
-        print("[ç½ååç³»ç»] æ£æµå°éç½ååç¨æ·:", localPlayer.Name)
+        print("[Whitelist System] Detected non-whitelisted user:", localPlayer.Name)
         showWhitelistWarning()
         return true
     end
@@ -272,7 +275,7 @@ function UI:NewWindow(title)
     self.MainGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     self.MainGui.ResetOnSpawn = false
     self.MainGui.Parent = syn and CoreGui or PlayerGui
-
+    -- ä¸»çªå£æ¡æ¶
     self.Window = Instance.new("Frame")
     self.Window.Name = "MainWindow"
     self.Window.Size = UDim2.new(0, 150, 0, 150)
@@ -281,23 +284,23 @@ function UI:NewWindow(title)
     self.Window.BorderSizePixel = 0
     self.Window.ClipsDescendants = true
     self.Window.Parent = self.MainGui
-
+    -- çªå£åè§
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = self.Window
-
+    -- çªå£é´å½±
     local shadow = Instance.new("UIStroke")
     shadow.Color = Color3.fromRGB(0, 0, 0)
     shadow.Transparency = 0.5
     shadow.Thickness = 4
     shadow.Parent = self.Window
- 
+    -- æ é¢æ 
     self.TitleBar = Instance.new("Frame")
     self.TitleBar.Name = "TitleBar"
     self.TitleBar.Size = UDim2.new(1, 0, 0, 40)
     self.TitleBar.BackgroundColor3 = Color3.fromRGB(36, 36, 42)
     self.TitleBar.Parent = self.Window
-
+    -- æ é¢æå­
     self.TitleText = Instance.new("TextLabel")
     self.TitleText.Name = "TitleText"
     self.TitleText.Size = UDim2.new(1, -40, 1, 0)
@@ -309,7 +312,7 @@ function UI:NewWindow(title)
     self.TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
     self.TitleText.TextXAlignment = Enum.TextXAlignment.Left
     self.TitleText.Parent = self.TitleBar
-  
+    -- æ¶èµ·æé®
     self.CollapseBtn = Instance.new("TextButton")
     self.CollapseBtn.Name = "CollapseBtn"
     self.CollapseBtn.Size = UDim2.new(0, 40, 1, 0)
@@ -320,7 +323,7 @@ function UI:NewWindow(title)
     self.CollapseBtn.TextSize = 20
     self.CollapseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     self.CollapseBtn.Parent = self.TitleBar
-
+    -- åå®¹å®¹å¨
     self.ContentContainer = Instance.new("ScrollingFrame")
     self.ContentContainer.Name = "ContentContainer"
     self.ContentContainer.Size = UDim2.new(1, 0, 1, -40)
@@ -329,24 +332,24 @@ function UI:NewWindow(title)
     self.ContentContainer.ScrollBarThickness = 4
     self.ContentContainer.CanvasSize = UDim2.new(1, 0, 0, 0)
     self.ContentContainer.Parent = self.Window
-
+    -- èåå®¹å¨
     self.MenuContainer = Instance.new("Frame")
     self.MenuContainer.Size = UDim2.new(1, 0, 0, 0)
     self.MenuContainer.BackgroundTransparency = 1
     self.MenuContainer.Parent = self.ContentContainer
- 
+    -- çªå£ææ½åè½
     self:MakeDraggable()
-
+    -- æ¶èµ·/å±å¼åè½
     self.IsCollapsed = false
     self.CollapseBtn.MouseButton1Click:Connect(function()
         self:ToggleCollapse()
     end)
-
+    -- å­å¨ææå­èå
     self.Sections = {}
     self.CurrentY = 0
     return self
 end
-
+-- çªå£ææ½
 function UI:MakeDraggable()
     local dragging = false
     local dragStart = Vector2.new()
@@ -447,7 +450,7 @@ function UI:NewSection(title)
     self.MenuContainer.Size = UDim2.new(1, 0, 0, self.CurrentY)
     self.ContentContainer.CanvasSize = UDim2.new(1, 0, 0, self.CurrentY)
     -- æ´æ°ä¸»çªå£é«åº¦ä»¥è·éå­èåå¤§å°
-    local newHeight = math.max(150, 40 + self.CurrentY + 20)
+    local newHeight = math.max(150, 40 + self.CurrentY + 20) -- 40 æ¯æ é¢æ é«åº¦ï¼20 æ¯åºé¨è¾¹è·
     TweenService:Create(self.Window, TweenInfo.new(0.2), {
         Size = UDim2.new(0, 150, 0, newHeight)
     }):Play()
@@ -492,7 +495,7 @@ function UI:NewSection(title)
         TweenService:Create(self.Window, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 150, 0, newHeight)
         }):Play()
-
+        -- æ´æ°åå®¹å®¹å¨å¤§å°
         self.ContentContainer.Size = UDim2.new(1, 0, 1, -40)
     end)
     -- åå»ºå¼å³æé®
@@ -525,9 +528,9 @@ function UI:NewSection(title)
         stateLabel.Size = UDim2.new(0, 30, 0, 20)
         stateLabel.Position = UDim2.new(1, -40, 0.5, -10)
         stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
-        stateLabel.Text = "å³"
-        stateLabel.Font = Enum.Font.SourceSansBold
-        stateLabel.TextSize = 12
+        stateLabel.Text = "Off"
+        stateLabel.Font = Enum.Font.SourceSansBold 
+        stateLabel.TextSize = 12 
         stateLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         stateLabel.Parent = btn
         local stateCorner = Instance.new("UICorner")
@@ -536,7 +539,7 @@ function UI:NewSection(title)
         -- æé®ç¹å»äºä»¶
         btn.MouseButton1Click:Connect(function()
             toggleState = not toggleState
-            stateLabel.Text = toggleState and "å¼" or "å³"
+            stateLabel.Text = toggleState and "On" or "Off"
             stateLabel.BackgroundColor3 = toggleState and Color3.fromRGB(60, 180, 60) or Color3.fromRGB(60, 60, 70)
             callback(toggleState)
         end)
@@ -759,7 +762,7 @@ local SkidFling = function(TargetPlayer)
     if not isFlinging then return end
     -- æ£æ¥TargetPlayeræææ§
     if not TargetPlayer or not TargetPlayer.Parent then
-        Message("ç©é£å¤±è´¥", "ç®æ ç©å®¶ä¸å­å¨", 3)
+       Message("Fling failed", "Target player does not exist", 3)
         return
     end
     local LocalChar = LocalPlayer.Character
@@ -767,7 +770,7 @@ local SkidFling = function(TargetPlayer)
     local LocalRoot = LocalHumanoid and LocalHumanoid.RootPart
     -- æ£æ¥æ¬å°è§è²æææ§
     if not (LocalChar and LocalHumanoid and LocalRoot) then
-        Message("ç©é£å¤±è´¥", "æ¬å°è§è²é¨ä»¶ç¼ºå¤±", 3)
+       Message("Fling failed", "Local character parts missing", 3)
         return
     end
     local TargetChar = TargetPlayer.Character
@@ -777,12 +780,12 @@ local SkidFling = function(TargetPlayer)
     local Accessory = TargetChar and TargetChar:FindFirstChildOfClass("Accessory")
     local AccessoryHandle = Accessory and Accessory:FindFirstChild("Handle")
     -- æ£æ¥ç®æ è§è²æææ§
-    if not (TargetChar and TargetHumanoid) then
-        Message("ç©é£å¤±è´¥", TargetPlayer.Name .. "è§è²æ æ", 3)
+   if not (TargetChar and TargetHumanoid) then
+        Message("Flight failed", TargetPlayer.Name .. " character invalid", 3)
         return
     end
     if TargetHumanoid.Sit then
-        Message("ç©é£å¤±è´¥", TargetPlayer.Name .. "æ­£å¨åä¸ï¼æ æ³ç©é£", 3)
+        Message("Flight failed", TargetPlayer.Name .. " is sitting down, cannot be flung", 3)
         return
     end
     -- ä¿å­åå§ä½ç½®ï¼ç¨äºæ¢å¤ï¼
@@ -866,7 +869,7 @@ local SkidFling = function(TargetPlayer)
     elseif AccessoryHandle then
         SFBasePart(AccessoryHandle)
     else
-        Message("ç©é£å¤±è´¥", TargetPlayer.Name .. "ç¼ºå¤±å³é®é¨ä»¶", 3)
+        MMessage("Flight failed", TargetPlayer.Name .. " missing key components", 3)
     end
     -- æ¸çä¸´æ¶å¯¹è±¡
     if BV and BV.Parent then BV:Destroy() end
@@ -893,34 +896,34 @@ end
 -- æ¹éç©é£æ§è¡å½æ°
 local startFling = function()
     -- è¥å·²å¨ç©é£ä¸­ï¼ç´æ¥è¿å
-    if isFlinging then
-        Message("æç¤º", "å·²å¨ç©é£ä¸­ï¼æ ééå¤å¼å¯", 2)
+   if isFlinging then
+        Message("Prompt", "Already flinging, no need to restart", 2)
         return
     end
-    -- æ£æ¥æ¬å°è§è²
+    -- Check local character
     if not LocalPlayer.Character then
-        Message("ç©é£å¤±è´¥", "è¯·åå è½½è§è²", 3)
+        Message("Fling failed", "Please load character first", 3)
         return
     end
-    -- è®¾ç½®ç©é£ç¶æ
+    -- Set fling state
     isFlinging = true
-    Message("ç©é£å¼å¯", "ç®æ ï¼" .. selectedTarget, 2)
-    -- å¯å¨ç©é£å¾ªç¯
+    Message("Fling started", "Target: " .. selectedTarget, 2)
+    -- Start fling loop
     flingConnection = task.spawn(function()
         while isFlinging do
-            -- åæ¬¡æ£æ¥æ¬å°è§è²ç¶æ
+            -- Check local character status again
             if not LocalPlayer.Character then
-                Message("ç©é£å¤±è´¥", "è§è²å·²ä¸¢å¤±", 3)
+                Message("Fling failed", "Character lost", 3)
                 stopFling()
                 return
             end
             local targetType = GetPlayer(selectedTarget)
             if targetType == "All" then
-                -- å¨éç®æ ï¼éåææéæ¬å°ç©å®¶
+                -- All targets: iterate through all non-local players
                 local allTargets = Players:GetPlayers()
                 table.remove(allTargets, table.find(allTargets, LocalPlayer))
                 if #allTargets == 0 then
-                    Message("ç©é£å¤±è´¥", "æ å¶ä»ç©å®¶å¯ä½ä¸ºç®æ ", 3)
+                    Message("Fling failed", "No other players available as targets", 3)
                     stopFling()
                     return
                 end
@@ -936,7 +939,7 @@ local startFling = function()
                 -- åä¸ªç®æ ï¼ç´æ¥æ§è¡
                 local singleTarget = targetType
                 if not singleTarget or singleTarget == LocalPlayer or not singleTarget.Parent or not singleTarget.Character then
-                    Message("ç©é£å¤±è´¥", "ç®æ ç©å®¶ä¸å­å¨æä¸ºèªå·±", 3)
+                   Message("Fling failed", "Target player does not exist or is yourself", 3)
                     stopFling()
                     return
                 end
@@ -949,7 +952,7 @@ end
 -- å³é­ç©é£å½æ°
 local stopFling = function()
     if not isFlinging then
-        Message("æç¤º", "æªå¨ç©é£ä¸­ï¼æ éå³é­", 2)
+        Message("Prompt", "Not currently flinging, no need to close", 2)
         return
     end
     -- éç½®ç¶æ
@@ -973,7 +976,7 @@ local stopFling = function()
     end
     -- æ¢å¤å è½é«åº¦
     workspace.FallenPartsDestroyHeight = getgenv().FPDH
-    Message("ç©é£å³é­", "å·²æ¢å¤æ­£å¸¸ç¶æ", 2)
+   Message("Fling stopped", "Normal state restored", 2)
 end
 -- å·æ°ç©å®¶åè¡¨
 local getPlayerOptions = function()
@@ -1020,7 +1023,7 @@ local function CreateFlingUI()
     TitleText.Size = UDim2.new(1, -30, 1, 0)
     TitleText.Position = UDim2.new(0, 8, 0, 0)
     TitleText.BackgroundTransparency = 1
-    TitleText.Text = "Kick Control"
+    TitleText.Text = "Fling Control"
     TitleText.Font = Enum.Font.SourceSansBold
     TitleText.TextSize = 14
     TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1054,7 +1057,7 @@ local function CreateFlingUI()
     TargetDesc.Size = UDim2.new(1, -15, 0, 12)
     TargetDesc.Position = UDim2.new(0, 8, 0, 24)
     TargetDesc.BackgroundTransparency = 1
-    TargetDesc.Text = "Select the player to kick"
+    TargetDesc.Text = "Select the player to fling (All = everyone)"
     TargetDesc.Font = Enum.Font.SourceSans
     TargetDesc.TextSize = 10
     TargetDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -1081,7 +1084,7 @@ local function CreateFlingUI()
     DropdownMenu.ClipsDescendants = true
     DropdownMenu.ScrollBarThickness = 3
     DropdownMenu.Parent = TargetDropdown
-
+    -- å¡«åä¸æèåéé¡¹
     local function populateDropdown()
         -- æ¸ç©ºç°æéé¡¹
         for _, child in ipairs(DropdownMenu:GetChildren()) do
@@ -1115,7 +1118,7 @@ local function CreateFlingUI()
                 selectedTarget = option
                 TargetDropdown.Text = option
                 DropdownMenu.BackgroundTransparency = 1
-                Message("Target switched", "Current target: " .. option, 2)
+               Message("Target switched", "Current target: " .. option, 2)
             end)
             optionBtn.MouseEnter:Connect(function()
                 optionBtn.BackgroundColor3 = Color3.fromRGB(54, 54, 60)
@@ -1137,7 +1140,7 @@ local function CreateFlingUI()
     StartBtn.Size = UDim2.new(1, -15, 0, 28)
     StartBtn.Position = UDim2.new(0, 8, 0, 260)
     StartBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
-    StartBtn.Text = "Start Fling"
+   StartBtn.Text = "Start Fling"
     StartBtn.Font = Enum.Font.SourceSansBold
     StartBtn.TextSize = 12
     StartBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1161,18 +1164,18 @@ local function CreateFlingUI()
     StartBtn.MouseButton1Click:Connect(function()
         -- ç¡®ä¿LocalPlayer.Characterå­å¨
         if not LocalPlayer.Character then
-            Message("Error", "Character not loaded, please try again later", 3)
+           Message("Error", "Character not loaded, please try again later", 3)
             return
         end
         startFling()
     end)
     StopBtn.MouseButton1Click:Connect(stopFling)
-
+    -- å³é­æé®
     CloseBtn.MouseButton1Click:Connect(function()
         FlingScreenGui:Destroy()
         flingUI = nil
     end)
-
+    -- çªå£ææ½
     local dragging = false
     local dragStart = Vector2.new()
     local startPos = UDim2.new()
@@ -1204,7 +1207,7 @@ local function CreateFlingUI()
     flingUI = FlingScreenGui
     return FlingScreenGui
 end
-
+-- åæ¢è¸¢é£UI
 local ToggleFlingUI = function()
     if not flingUI then
         CreateFlingUI()
@@ -1215,13 +1218,13 @@ local ToggleFlingUI = function()
 end
 -- ===================== èªå®ä¹å¨ä½åè½ =====================
 local function loadCustomEmotes()
-
+    -- æ¾ç¤ºå è½½éç¥
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Wait!",
         Text = "Please Wait, it just loading the button",
         Duration = 15
     })
-
+    -- æ¸çæ§çEmotes GUI
     if game:GetService("CoreGui"):FindFirstChild("Emotes") then
         game:GetService("CoreGui"):FindFirstChild("Emotes"):Destroy()
     end
@@ -1373,7 +1376,7 @@ local function loadCustomEmotes()
     FavoritesButton.TextColor3 = Color3.new(1, 1, 1)
     FavoritesButton.BackgroundColor3 = Color3.new(0, 0, 0)
     FavoritesButton.BackgroundTransparency = 0.3
-    FavoritesButton.Text = "Favorites"
+ FavoritesButton.Text = "Favorites"
     FavoritesButton.Parent = BackFrame
     Corner:Clone().Parent = FavoritesButton
     -- æ¶èæé®åè½
@@ -2613,13 +2616,13 @@ local function toggleMountTai(enabled)
     if enabled then
         local currentCharacter = LocalPlayer.Character
         if not currentCharacter or not currentCharacter.Parent then
-            Message("Character does not exist, cannot open",3)
+            Message("Rock solid", "Character does not exist, cannot start", 3)
             return
         end
         local currentHumanoid = currentCharacter:FindFirstChildOfClass("Humanoid")
         local currentRootPart = currentCharacter:FindFirstChild("HumanoidRootPart")
         if not currentHumanoid or not currentRootPart then
-            Message("Character components missing, cannot open", 3)
+           Message("Rock solid", "Character parts missing, cannot start", 3)
             return
         end
         LockState.OriginalWalkSpeed = currentHumanoid.WalkSpeed
@@ -2639,7 +2642,7 @@ local function toggleMountTai(enabled)
                 part.CanQuery = true
             end
         end
-        Message("Character lock enabled, you can eat in place", 2)
+       Message("Rock solid", "Character anchoring enabled, you can eat/drink in place", 2)
     else
         local currentCharacter = LocalPlayer.Character
         if currentCharacter and currentCharacter.Parent then
@@ -2670,12 +2673,12 @@ local function toggleMountTai(enabled)
                 end)
                 currentRootPart.Velocity = Vector3.new(0, 0, 0)
                 currentRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                Message("Disabled, character movement restored", 2)
+              Message("Rock solid", "Disabled, character movement restored to normal", 2)
             else
-                Message("Already Closed", 2)
+                Message("Rock solid", "Disabled", 2)
             end
         else
-            Message("Already Closed­", 2)
+            Message("Rock solid", "Disabled", 2)
         end
     end
 end
@@ -2789,7 +2792,7 @@ local function CreateSpeedUI()
         btn.MouseButton1Click:Connect(function()
             CurrentSpeed = value
             ApplySpeed()
-           Message("Speed Modified", "Applied speed: " .. CurrentSpeed, 2)
+           Message("Speed modified", "Applied speed: " .. CurrentSpeed, 2)
             for _, b in ipairs(speedButtons) do
                 b.BackgroundColor3 = Color3.fromRGB(44, 44, 50)
             end
@@ -2847,10 +2850,10 @@ end
 local function ToggleSpeedUI()
     if not SpeedUI then
         CreateSpeedUI()
-    end
+end
     SpeedUI.Enabled = not SpeedUI.Enabled
-    local status = SpeedUI.Enabled and "æå¼" or "å³é­"
-  Message("Custom Speed", "Speed control panel " .. status, 2)
+    local status = SpeedUI.Enabled and "Open" or "Closed"
+    Message("Custom Speed", "Speed control panel " .. status, 2)
 end
 -- åæ¶éåº
 local function cancelAnchored()
@@ -2861,16 +2864,16 @@ local function cancelAnchored()
                 part.Anchored = false
             end
         end
-        Message("Unanchor", "All character parts unanchored", 2)
+       Message("Unanchor", "All character parts have been unanchored", 2)
     else
-       Message("Unanchor", "Character does not exist", 3)
+        Message("Unanchor", "Character does not exist", 3)
     end
 end
--- æ¥çç©å®¶æ°æ®
+-- View player data
 local function loadAndRunPlayerDataScript()
-    -- æ¬å°åè¡¨
-   local localization = {
-        MaxSize = "Size",
+    -- Localization table
+    local localization = {
+        MaxSize = "Volume",
         Speed = "Speed",
         Multiplier = "Multiplier",
         EatSpeed = "Eat Speed",
@@ -2918,33 +2921,33 @@ local function loadAndRunPlayerDataScript()
     -- æ¥çç©å®¶æ°æ®æ ¸å¿å½æ°
     local function showPlayerData()
         print("=======================================")
-        print("Viewing player data")
+print("Viewing player data")
         print("=======================================")
         for _, player in Players:GetPlayers() do
             print()
-            print("Player .. player.Name)
+            print("Player: " .. player.Name)
             print("=======================================")
             local hasUpgrades = false
             if player.Upgrades then
                 for _, upg in player.Upgrades:GetChildren() do
                     hasUpgrades = true
-                    local content = "  " .. localization[upg.Name] .. "ï¼"
+                    local content = "  " .. localization[upg.Name] .. ":"
                     local cost = 0
                     for l = 2, upg.Value do
                         cost += priceFunctions[upg.Name](l)
                     end
-                    content = content .. " " .. upg.Value .. "çº§ï¼"
-                    content = content .. " " .. growthFunctions[upg.Name](upg.Value) .. "å¼ï¼"
-                    content = content .. " " .. cost .. "è±è´¹"
+                    content = content .. " " .. upg.Value .. " level;"
+                    content = content .. " " .. growthFunctions[upg.Name](upg.Value) .. " value;"
+                    content = content .. " " .. cost .. " spent"
                     print(content)
                 end
             end
             if not hasUpgrades then
-                print("  No upgrade data available")
+                print("  No upgrade data yet")
             end
         end
         print("=======================================")
-       print("Data view completed")
+        print("Data viewing complete")
         print("=======================================")
         -- æ¾ç¤ºå¼åèæ§å¶å°ï¼å¯éï¼
         pcall(function()
@@ -2953,7 +2956,7 @@ local function loadAndRunPlayerDataScript()
     end
     -- æ§è¡æ¥çç©å®¶æ°æ®
     showPlayerData()
-   Message("View Player Data", "Data loaded successfully", 2))
+   Message("View player data", "Data loaded successfully", 2)
 end
 -- ææ»æ¶é¤
 local function toggleSlippageElimination(enabled)
@@ -2989,15 +2992,15 @@ local function toggleSlippageElimination(enabled)
             local rootVelocity = rootPart.Velocity
             rootPart.Velocity = Vector3.new(currentVelocity.X, rootVelocity.Y, currentVelocity.Z)
         end)
-       Message("Anti-slip", "Anti-slip enabled", 2)
+        Message("Slippage elimination", "Slippage elimination enabled", 2)
     else
-        -- å³é­ææ»æ¶é¤
+        -- Disable slippage elimination
         slippageEliminationEnabled = false
         if slippageConnection then
             slippageConnection:Disconnect()
             slippageConnection = nil
         end
-       Message("Anti-slip", "Anti-slip disabled", 2)
+        Message("Slippage elimination", "Slippage elimination disabled", 2)
     end
 end
 -- éåéå®
@@ -3015,15 +3018,15 @@ local function toggleGravityLock(enabled)
                 task.wait(0.1)
             end
         end)
-        Message("Gravity Lock", "Gravity lock enabled", 2)
+      Message("Gravity lock", "Gravity lock enabled", 2)
     else
-        -- å³é­éåéå®
+        -- Disable gravity lock
         gravityLockEnabled = false
         if gravityLockConnection then
             task.cancel(gravityLockConnection)
             gravityLockConnection = nil
         end
-        Message("Gravity Lock", "Gravity lock disabled", 2)
+        Message("Gravity lock", "Gravity lock disabled", 2)
     end
 end
 -- è¢«å¨é²å¾¡
@@ -3067,15 +3070,15 @@ local function togglePassiveDefense(enabled)
                 end
             end
         end)
-       Message("Passive Defense", "Passive defense enabled", 2)
+    Message("Passive defense", "Passive defense enabled", 2)
     else
-        -- å³é­è¢«å¨é²å¾¡
+        -- Disable passive defense
         passiveDefenseEnabled = false
         if passiveDefenseConnection then
             passiveDefenseConnection:Disconnect()
             passiveDefenseConnection = nil
         end
-       Message("Passive Defense", "Passive defense disabled", 2)
+        Message("Passive defense", "Passive defense disabled", 2)
     end
 end
 -- ä¼ éæäºº
@@ -3229,7 +3232,7 @@ local function CreateTeleportGrabUI()
             false,
             true, 
             grabPosition,
-            "Pick Up"
+            "Bend over grab"
         }
         local grabEvent = character:WaitForChild("Events"):WaitForChild("Grab")
         grabEvent:FireServer(unpack(args))
@@ -3264,17 +3267,17 @@ local function CreateTeleportGrabUI()
                         local to = c1:FindFirstChild("HumanoidRootPart") or c1:FindFirstChild("Head") or c1:FindFirstChildWhichIsA("BasePart")
                         if to then
                             weldtp(tp, to.CFrame)
-                            notify("ä¼ éè³: " .. plr.Name)
-                            -- ä¼ éåèªå¨æ§è¡æå
+                            notify("Teleported to: " .. plr.Name)
+                            -- Automatically execute grab after teleport
                             grabPlayer()
-                       else
-                            notify("Target missing body part")
+                        else
+                            notify("Target missing body parts")
                         end
                     else
                         notify("Target character does not exist")
                     end
                 else
-                    notify("Self missing body part")
+                    notify("Self missing body parts")
                 end
             else
                 notify("Self character does not exist")
@@ -3371,7 +3374,7 @@ local function grabForwardObject()
         false,
         true, 
         grabPosition,
-        "Pick Up"
+       "Bend over grab"
     }
     local grabEvent = character:WaitForChild("Events"):WaitForChild("Grab")
     grabEvent:FireServer(unpack(args))
@@ -3631,7 +3634,7 @@ local function CreateTeleportThrowUI()
     titleLabel.Size = UDim2.new(1, -40, 1, 0)
     titleLabel.Position = UDim2.new(0, 10, 0, 0)
     titleLabel.Font = Enum.Font.SourceSansBold
-    titleLabel.Text = "Teleport Eat"
+    titleLabel.Text = "Teleport Smash"
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.TextSize = 16
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -3787,9 +3790,9 @@ local function ToggleTeleportThrowUI()
 end
 -- ===================== UIåå§å =====================
 local mainUI = UI:NewWindow("Eat the World")
--- èªå¨å­èå
+-- Auto submenu
 local autoSection = mainUI:NewSection("Auto")
-autoSection:CreateToggle("Auto Farm", function(enabled)
+autoSection:CreateToggle("Auto farm", function(enabled)
     autofarm = enabled
     coroutine.wrap(function()
         local text = Drawing.new("Text")
@@ -3864,8 +3867,8 @@ autoSection:CreateToggle("Auto Farm", function(enabled)
                 local minuteEarn = secondEarn * 60
                 local hourEarn = minuteEarn * 60
                 local dayEarn = hourEarn * 24
-              text.Text = ""
-                    .. "\nRun time: " .. string.format("%ih%im%is", hours, minutes % 60, seconds % 60)
+                text.Text = ""
+                   .. "\nRuntime: " .. string.format("%ih%im%is", hours, minutes % 60, seconds % 60)
                     .. "\nActual time: " .. string.format("%im%is", eatMinutes % 60, eatSeconds % 60)
                     .. "\nApprox time: " .. string.format("%im%is", sellMinutes % 60, sellSeconds % 60)
                     .. "\nPer day: " .. dayEarn
@@ -3996,7 +3999,7 @@ autoSection:CreateToggle("Auto Farm", function(enabled)
         text:Destroy()
     end)()
 end)
-autoSection:CreateToggle("Auto Collect", function(enabled)
+autoSection:CreateToggle("Auto collect", function(enabled)
     autoCollectingCubes = enabled
     coroutine.wrap(function()
         LocalPlayer.PlayerScripts.CubeVis.Enabled = false
@@ -4014,7 +4017,7 @@ autoSection:CreateToggle("Auto Collect", function(enabled)
         LocalPlayer.PlayerScripts.CubeVis.Enabled = true
     end)()
 end)
-autoSection:CreateToggle("Auto Claim", function(enabled)
+autoSection:CreateToggle("Auto claim", function(enabled)
     autoClaimRewards = enabled
     coroutine.wrap(function()
         while autoClaimRewards do
@@ -4028,13 +4031,13 @@ autoSection:CreateToggle("Auto Claim", function(enabled)
         end
     end)()
 end)
-autoSection:CreateToggle("Move Mode", function(enabled)
+autoSection:CreateToggle("Move mode", function(enabled)
     farmMoving = enabled
 end)
-autoSection:CreateToggle("Show Map", function(enabled)
+autoSection:CreateToggle("Show map", function(enabled)
     showMap = enabled
 end)
-autoSection:CreateToggle("Auto Eat", function(enabled)
+autoSection:CreateToggle("Auto eat", function(enabled)
     autoeat = enabled
     coroutine.wrap(function()
         while autoeat do
@@ -4048,7 +4051,7 @@ autoSection:CreateToggle("Auto Eat", function(enabled)
     end)()
 end)
 -- äººç©å­èå
-local figureSection = mainUI:NewSection("äººç©")
+local figureSection = mainUI:NewSection("Character")
 figureSection:CreateToggle("Unanchor", function(enabled)
     keepUnanchor = enabled
     coroutine.wrap(function()
@@ -4060,10 +4063,10 @@ figureSection:CreateToggle("Unanchor", function(enabled)
         end
     end)()
 end)
-figureSection:CreateToggle("Steady as a Mountain", function(enabled)
+figureSection:CreateToggle("Rock solid", function(enabled)
     toggleMountTai(enabled)
 end)
-figureSection:CreateToggle("Anti-Fall", function(enabled)
+figureSection:CreateToggle("Fall pullback", function(enabled)
     antiFallEnabled = enabled
     if enabled then
         local char = LocalPlayer.Character
@@ -4074,30 +4077,30 @@ figureSection:CreateToggle("Anti-Fall", function(enabled)
         stopAntiFall()
     end
 end)
-figureSection:CreateToggle("Custom Speed", function(enabled)
+figureSection:CreateToggle("Custom speed", function(enabled)
     ToggleSpeedUI()
     -- Auto toggle off
     for _, btn in ipairs(figureSection.Buttons) do
-        if btn.Name == "ToggleBtn_Custom Speed" then
+        if btn.Name == "ToggleBtn_Custom speed" then
             local stateLabel = btn:FindFirstChildOfClass("TextLabel")
             if stateLabel then
-                stateLabel.Text = "Custom Speed"
+                stateLabel.Text = "Custom speed"
                 stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
             end
             break
         end
     end
 end)
-figureSection:CreateToggle("Invisibility", function(enabled)
+figureSection:CreateToggle("Invisible", function(enabled)
     if enabled then
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-35376"))()
-       Message("Invisibility", "Function executed", 2)
-        -- èªå¨å³é­å¼å³
+        Message("Invisible", "Function executed", 2)
+        -- Auto toggle off
         for _, btn in ipairs(figureSection.Buttons) do
-            if btn.Name == "ToggleBtn_éèº«" then
+            if btn.Name == "ToggleBtn_Invisible" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "éèº«"
+                    stateLabel.Text = "Invisible"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4105,13 +4108,13 @@ figureSection:CreateToggle("Invisibility", function(enabled)
         end
     end
 end)
-figureSection:CreateToggle("Anti-Slip", function(enabled)
+figureSection:CreateToggle("Slippage elimination", function(enabled)
     toggleSlippageElimination(enabled)
 end)
-figureSection:CreateToggle("Gravity Lock", function(enabled)
+figureSection:CreateToggle("Gravity lock", function(enabled)
     toggleGravityLock(enabled)
 end)
-figureSection:CreateToggle("Passive Defense", function(enabled)
+figureSection:CreateToggle("Passive defense", function(enabled)
     togglePassiveDefense(enabled)
 end)
 -- éæ°å å¥å½åæå¡å¨å½æ°
@@ -4121,30 +4124,30 @@ local function rejoinCurrentServer()
     local TeleportService = game:GetService("TeleportService")
     -- éªè¯æ¬å°ç©å®¶å­å¨
     local localPlayer = Players.LocalPlayer
-    if not localPlayer then
+   if not localPlayer then
         warn("Unable to get local player")
         return
     end
-    -- éªè¯å½åå¨æå¡å¨ä¸­
-   if not game.PlaceId or game.PlaceId <= 0 then
-        warn("Not currently in a valid game")
+    -- Verify currently in server
+    if not game.PlaceId or game.PlaceId <= 0 then
+        warn("Currently not in a valid game")
         return
     end
     if not game.JobId or game.JobId == "" then
-        warn("Not currently in a server")
+        warn("Currently not in a server")
         return
     end
-    -- Get current server information
+    -- è·åå½åæå¡å¨ä¿¡æ¯
     local placeId = game.PlaceId
     local jobId = game.JobId
-    print("=== Server Information ===")
+   print("=== Server Information ===")
     print("Game ID (PlaceId):", placeId)
     print("Server ID (JobId):", jobId)
     print("=================")
-    -- æ§è¡éæ°å å¥
-    print("æ­£å¨åééæ°å å¥è¯·æ±...")
+    -- Execute rejoin
+    print("Sending rejoin request...")
     local success, errorMsg = pcall(function()
-        -- æ ¸å¿æ¹æ³ï¼ä¼ éå°æå®çæå¡å¨å®ä¾
+        -- Core method: Teleport to the specified server instance
         TeleportService:TeleportToPlaceInstance(placeId, jobId, localPlayer)
     end)
     if success then
@@ -4155,24 +4158,24 @@ local function rejoinCurrentServer()
         -- Try backup method after failure
         print("Trying backup method...")
         local backupSuccess, backupError = pcall(function()
-            -- Backup method: normal teleport (may enter new server)
+            -- Backup method: Regular teleport (may enter a new server)
             TeleportService:Teleport(placeId, localPlayer)
         end)
         if backupSuccess then
-            print("Backup method executed successfully (may enter new server)")
+            print("Backup method executed successfully (may enter a new server)")
         else
             warn("Backup method also failed:", backupError)
         end
     end
 end
-figureSection:CreateToggle("Emote Pack", function(enabled)
+figureSection:CreateToggle("Emotes pack", function(enabled)
     loadCustomEmotes()
     -- Auto toggle off
     for _, btn in ipairs(figureSection.Buttons) do
-        if btn.Name == "ToggleBtn_Emote Pack" then
+        if btn.Name == "ToggleBtn_Emotes pack" then
             local stateLabel = btn:FindFirstChildOfClass("TextLabel")
             if stateLabel then
-                stateLabel.Text = "Emote Pack"
+                stateLabel.Text = "Emotes pack"
                 stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
             end
             break
@@ -4199,7 +4202,7 @@ local function hideEnvironment()
     bedrock.Position = Vector3.new(0, 0, 0)
     bedrock.BrickColor = BrickColor.new("grey")
     bedrock.Parent = workspace
-   Message("Prompt", "Environment objects hidden, bedrock generated", 2)
+   Message("Prompt", "Environment objects hidden, foundation generated", 2)
 end
 -- æ¢å¤ç¯å¢å¯¹è±¡
 local function restoreEnvironment()
@@ -4214,19 +4217,19 @@ local function restoreEnvironment()
         bedrock:Destroy()
         bedrock = nil
     end
-   Message("Prompt", "Environment objects restored, bedrock removed", 2)
+   Message("Prompt", "Environment objects restored, foundation removed", 2)
 end
 -- å¶ä»å­èå
-local otherSection = mainUI:NewSection("å¶ä»")
-otherSection:CreateToggle("Hide Map", function(enabled)
+local otherSection = mainUI:NewSection("Other")
+otherSection:CreateToggle("Hide map", function(enabled)
     if enabled then
         hideEnvironment()
         -- Auto toggle off
         for _, btn in ipairs(otherSection.Buttons) do
-            if btn.Name == "ToggleBtn_Hide Map" then
+            if btn.Name == "ToggleBtn_Hide map" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "Hide Map"
+                    stateLabel.Text = "Hide map"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4234,15 +4237,15 @@ otherSection:CreateToggle("Hide Map", function(enabled)
         end
     end
 end)
-otherSection:CreateToggle("Restore Map", function(enabled)
+otherSection:CreateToggle("Restore map", function(enabled)
     if enabled then
         restoreEnvironment()
         -- Auto toggle off
         for _, btn in ipairs(otherSection.Buttons) do
-            if btn.Name == "ToggleBtn_Restore Map" then
+            if btn.Name == "ToggleBtn_Restore map" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "Restore Map"
+                    stateLabel.Text = "Restore map"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4250,15 +4253,15 @@ otherSection:CreateToggle("Restore Map", function(enabled)
         end
     end
 end)
-otherSection:CreateToggle("Rejoin Current Server", function(enabled)
+otherSection:CreateToggle("Rejoin current server", function(enabled)
     if enabled then
         rejoinCurrentServer()
         -- Auto toggle off
         for _, btn in ipairs(otherSection.Buttons) do
-            if btn.Name == "ToggleBtn_Rejoin Current Server" then
+            if btn.Name == "ToggleBtn_Rejoin current server" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "Rejoin Current Server"
+                    stateLabel.Text = "Rejoin current server"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4266,15 +4269,15 @@ otherSection:CreateToggle("Rejoin Current Server", function(enabled)
         end
     end
 end)
-otherSection:CreateToggle("View Player Data", function(enabled)
+otherSection:CreateToggle("View player data", function(enabled)
     if enabled then
         loadAndRunPlayerDataScript()
         -- Auto toggle off
         for _, btn in ipairs(otherSection.Buttons) do
-            if btn.Name == "ToggleBtn_View Player Data" then
+            if btn.Name == "ToggleBtn_View player data" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "View Player Data"
+                    stateLabel.Text = "View player data"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4282,30 +4285,30 @@ otherSection:CreateToggle("View Player Data", function(enabled)
         end
     end
 end)
-otherSection:CreateToggle("Fling Players", function(enabled)
+otherSection:CreateToggle("Fling players", function(enabled)
     ToggleFlingUI()
     -- Auto toggle off
     for _, btn in ipairs(otherSection.Buttons) do
-        if btn.Name == "ToggleBtn_Fling Players" then
+        if btn.Name == "ToggleBtn_Fling players" then
             local stateLabel = btn:FindFirstChildOfClass("TextLabel")
             if stateLabel then
-                stateLabel.Text = "Fling Players"
+                stateLabel.Text = "Fling players"
                 stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
             end
             break
         end
     end
 end)
-otherSection:CreateToggle("Ram Players", function(enabled)
+otherSection:CreateToggle("Ram players", function(enabled)
     if enabled then
         loadstring(game:HttpGet('https://raw.githubusercontent.com/0Ben1/fe/main/obf_rf6iQURzu1fqrytcnLBAvW34C9N55kS9g9G3CKz086rC47M6632sEd4ZZYB0AYgV.lua.txt'))()
-        Message("Ram Players", "Function executed", 2)
+        Message("Ram players", "Function executed", 2)
         -- Auto toggle off
         for _, btn in ipairs(otherSection.Buttons) do
-            if btn.Name == "ToggleBtn_Ram Players" then
+            if btn.Name == "ToggleBtn_Ram players" then
                 local stateLabel = btn:FindFirstChildOfClass("TextLabel")
                 if stateLabel then
-                    stateLabel.Text = "Ram Players"
+                    stateLabel.Text = "Ram players"
                     stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
                 end
                 break
@@ -4313,28 +4316,28 @@ otherSection:CreateToggle("Ram Players", function(enabled)
         end
     end
 end)
-otherSection:CreateToggle("Teleport Slam", function(enabled)
+otherSection:CreateToggle("Teleport smash", function(enabled)
     ToggleTeleportThrowUI()
     -- Auto toggle off
     for _, btn in ipairs(otherSection.Buttons) do
-        if btn.Name == "ToggleBtn_Teleport Slam" then
+        if btn.Name == "ToggleBtn_Teleport smash" then
             local stateLabel = btn:FindFirstChildOfClass("TextLabel")
             if stateLabel then
-                stateLabel.Text = "Teleport Slam"
+                stateLabel.Text = "Teleport smash"
                 stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
             end
             break
         end
     end
 end)
-otherSection:CreateToggle("Teleport Grab", function(enabled)
+otherSection:CreateToggle("Teleport grab", function(enabled)
     ToggleTeleportGrabUI()
     -- Auto toggle off
     for _, btn in ipairs(otherSection.Buttons) do
-        if btn.Name == "ToggleBtn_Teleport Grab" then
+        if btn.Name == "ToggleBtn_Teleport grab" then
             local stateLabel = btn:FindFirstChildOfClass("TextLabel")
             if stateLabel then
-                stateLabel.Text = "Teleport Grab"
+                stateLabel.Text = "Teleport grab"
                 stateLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
             end
             break
@@ -4374,4 +4377,4 @@ RunService.RenderStepped:Connect(function()
 end)
 -- åå§å
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
-Message("UI Loaded", "Eat the World Assistant loaded successfully", 3)
+Message("UI loaded", "Eat the World assistant loaded successfully", 3)
