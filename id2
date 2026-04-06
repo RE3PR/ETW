@@ -666,10 +666,11 @@ local autoFarmCallback = function(enabled)
 end
 
 -- ===================== New Variables =====================
-local allCratesClaimed = false
+-- ===================== New Variables =====================
+local firstCrateClaimed = false
 local completionFileWritten = false
 
--- ===================== Improved Auto Collect with Completion Check =====================
+-- ===================== Auto Collect - Triggers on FIRST crate =====================
 local autoCollectCallback = function(enabled)
     autoCollectingCubes = enabled
     if not enabled then
@@ -681,41 +682,40 @@ local autoCollectCallback = function(enabled)
         LocalPlayer.PlayerScripts.CubeVis.Enabled = false
         
         while autoCollectingCubes do
-            task.wait(0.5)  -- Slightly slower to reduce lag
+            task.wait(0.3)
             
             local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            local cubesFound = 0
+            local cratesFoundThisCycle = 0
             
             if root then
                 for _, v in ipairs(workspace:GetChildren()) do
                     if v.Name == "Cube" and v:FindFirstChild("Owner") then
                         local owner = v.Owner.Value
                         if owner == LocalPlayer.Name or owner == "" then
-                            cubesFound += 1
+                            cratesFoundThisCycle += 1
                             v.CFrame = root.CFrame  -- Collect it
+                            
+                            -- ==================== FIRST CRATE DETECTED ====================
+                            if not firstCrateClaimed then
+                                firstCrateClaimed = true
+                                print("[Eat the World] First crate claimed! Writing completion file...")
+                                
+                                if not completionFileWritten then
+                                    local success, err = pcall(function()
+                                        writefile("EatTheWorld_FirstClaim.txt", "1")
+                                    end)
+                                    
+                                    if success then
+                                        print("[Eat the World] File successfully written: EatTheWorld_FirstClaim.txt")
+                                    else
+                                        warn("[Eat the World] Failed to write file: " .. tostring(err))
+                                    end
+                                    
+                                    completionFileWritten = true
+                                end
+                            end
                         end
                     end
-                end
-            end
-            
-            -- ==================== COMPLETION CHECK ====================
-            if cubesFound == 0 and not allCratesClaimed then
-                allCratesClaimed = true
-                print("[Eat the World] All crates have been claimed!")
-                
-                -- Write to file ONLY ONCE
-                if not completionFileWritten then
-                    local success, err = pcall(function()
-                        writefile("EatTheWorld_Complete.txt", "1")
-                    end)
-                    
-                    if success then
-                        print("[Eat the World] Completion file written: EatTheWorld_Complete.txt = 1")
-                    else
-                        print("[Eat the World] Failed to write file: " .. tostring(err))
-                    end
-                    
-                    completionFileWritten = true
                 end
             end
         end
