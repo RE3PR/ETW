@@ -4377,4 +4377,39 @@ RunService.RenderStepped:Connect(function()
 end)
 -- åå§å
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
+
+-- Add this at the end of your script, right before the final Message line
+
+-- Auto-enable Auto Farm on startup
+task.wait(2) -- Wait for UI and character to fully load
+
+-- Find and enable the Auto Farm toggle
+local function enableAutoFarm()
+    if mainUI and mainUI.Sections then
+        for _, section in ipairs(mainUI.Sections) do
+            if section.Title == "Auto" then
+                for _, btn in ipairs(section.Buttons) do
+                    if btn.Name == "ToggleBtn_Auto farm" then
+                        -- Click the button to enable it
+                        local clickableButton = btn:FindFirstChildWhichIsA("TextButton") or btn
+                        clickableButton.MouseButton1Click:Fire()
+                        print("[Auto Farm] Enabled by default")
+                        break
+                    end
+                end
+                break
+            end
+        end
+    else
+        -- Retry if UI isn't ready
+        task.wait(1)
+        enableAutoFarm()
+    end
+end
+
+enableAutoFarm()
+
+-- Keep UI toggle functional (user can still disable/enable manually)
+-- The original toggle callback will work alongside this
+
 Message("UI loaded", "Eat the World assistant loaded successfully", 3)
