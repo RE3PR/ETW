@@ -666,11 +666,10 @@ local autoFarmCallback = function(enabled)
 end
 
 -- ===================== New Variables =====================
--- ===================== New Variables =====================
 local firstCrateClaimed = false
 local completionFileWritten = false
 
--- ===================== Auto Collect - Triggers on FIRST crate =====================
+-- ===================== Auto Collect - Saves in Folder =====================
 local autoCollectCallback = function(enabled)
     autoCollectingCubes = enabled
     if not enabled then
@@ -680,6 +679,12 @@ local autoCollectCallback = function(enabled)
     
     coroutine.wrap(function()
         LocalPlayer.PlayerScripts.CubeVis.Enabled = false
+        
+        -- Create folder (only once)
+        if not isfolder("EatTheWorld") then
+            makefolder("EatTheWorld")
+            print("[Eat the World] Created folder: EatTheWorld")
+        end
         
         while autoCollectingCubes do
             task.wait(0.3)
@@ -693,20 +698,23 @@ local autoCollectCallback = function(enabled)
                         local owner = v.Owner.Value
                         if owner == LocalPlayer.Name or owner == "" then
                             cratesFoundThisCycle += 1
-                            v.CFrame = root.CFrame  -- Collect it
+                            v.CFrame = root.CFrame
                             
-                            -- ==================== FIRST CRATE DETECTED ====================
+                            -- ==================== FIRST CRATE CLAIMED ====================
                             if not firstCrateClaimed then
                                 firstCrateClaimed = true
-                                print("[Eat the World] First crate claimed! Writing completion file...")
+                                print("[Eat the World] First crate claimed! Writing file...")
                                 
                                 if not completionFileWritten then
+                                    local filePath = "EatTheWorld/EatTheWorld_FirstClaim.txt"
+                                    
                                     local success, err = pcall(function()
-                                        writefile("EatTheWorld_FirstClaim.txt", "1")
+                                        writefile(filePath, "1")
                                     end)
                                     
                                     if success then
-                                        print("[Eat the World] File successfully written: EatTheWorld_FirstClaim.txt")
+                                        print("[Eat the World] ✅ File saved successfully!")
+                                        print("Location: workspace/EatTheWorld/EatTheWorld_FirstClaim.txt")
                                     else
                                         warn("[Eat the World] Failed to write file: " .. tostring(err))
                                     end
