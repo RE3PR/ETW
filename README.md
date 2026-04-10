@@ -9,9 +9,9 @@
 ### Main Script
 
 ```
-loadstring(game:HttpGet("https://raw.githubusercontent.com/RE3PR/ETW-Cheet/main/Main"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RE3PR/ETW/main/Main"))()
 ```
 AutoFarm Script
 ```
-loadstring(game:HttpGet("https://raw.githubusercontent.com/RE3PR/ETW-Cheet/main/AutoFarm"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/RE3PR/ETW/main/AutoFarm"))()
 ```
