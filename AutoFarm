@@ -715,7 +715,7 @@ autoSection:CreateToggle("Auto claim", autoClaimCallback, true)
 -- ===================== Auto Upgrade Section =====================
 local upgradeSection = mainUI:NewSection("Auto Upgrade")
 
-local autoUpgradeEnabled = true          -- master enable/disable
+local autoUpgradeEnabled = true
 local upgradeMode = "Ratio"              -- "Size", "Multi", "Speed", "EatSpeed", "Ratio"
 local targetRatio = 5.5
 local upgradeSpeedExtra = false
@@ -726,74 +726,86 @@ upgradeSection:CreateToggle("Auto Upgrade (Master)", function(enabled)
     autoUpgradeEnabled = enabled
 end, true)
 
--- Radio buttons for mode selection (mutually exclusive)
+-- Helper to set mode and update extra toggle visibility
 local function setMode(mode)
     upgradeMode = mode
-    -- Update extra toggle visibility
+    -- Update extra toggles visibility (only in Ratio mode)
     extraSpeedToggle.Visible = (mode == "Ratio")
     extraEatToggle.Visible = (mode == "Ratio")
     print("[Auto Upgrade] Mode set to:", mode)
 end
 
--- These toggles will turn each other off
-local modeToggles = {}
+-- Radio button toggles (only one can be On at a time)
+-- We'll store the callback functions so we can turn others Off when one is turned On
+local modeCallbacks = {}
 
 local modeSize = upgradeSection:CreateToggle("Mode: Size only", function(enabled)
     if enabled then
-        for _, t in ipairs(modeToggles) do
-            if t ~= modeSize then t:Toggle(false) end
+        for _, cb in ipairs(modeCallbacks) do
+            if cb ~= modeSizeCb then cb(false) end
         end
         setMode("Size")
     elseif upgradeMode == "Size" then
-        setMode("Ratio")  -- fallback to Ratio if turning off the only selected
+        -- If turning off the current mode, fallback to Ratio
+        setMode("Ratio")
+        modeRatioCb(true)   -- turn Ratio back on
     end
 end, false)
 
 local modeMulti = upgradeSection:CreateToggle("Mode: Multiplier only", function(enabled)
     if enabled then
-        for _, t in ipairs(modeToggles) do
-            if t ~= modeMulti then t:Toggle(false) end
+        for _, cb in ipairs(modeCallbacks) do
+            if cb ~= modeMultiCb then cb(false) end
         end
         setMode("Multi")
     elseif upgradeMode == "Multi" then
         setMode("Ratio")
+        modeRatioCb(true)
     end
 end, false)
 
 local modeSpeed = upgradeSection:CreateToggle("Mode: Walkspeed only", function(enabled)
     if enabled then
-        for _, t in ipairs(modeToggles) do
-            if t ~= modeSpeed then t:Toggle(false) end
+        for _, cb in ipairs(modeCallbacks) do
+            if cb ~= modeSpeedCb then cb(false) end
         end
         setMode("Speed")
     elseif upgradeMode == "Speed" then
         setMode("Ratio")
+        modeRatioCb(true)
     end
 end, false)
 
 local modeEat = upgradeSection:CreateToggle("Mode: EatSpeed only", function(enabled)
     if enabled then
-        for _, t in ipairs(modeToggles) do
-            if t ~= modeEat then t:Toggle(false) end
+        for _, cb in ipairs(modeCallbacks) do
+            if cb ~= modeEatCb then cb(false) end
         end
         setMode("EatSpeed")
     elseif upgradeMode == "EatSpeed" then
         setMode("Ratio")
+        modeRatioCb(true)
     end
 end, false)
 
 local modeRatio = upgradeSection:CreateToggle("Mode: Ratio 5.5 (Size+Multi)", function(enabled)
     if enabled then
-        for _, t in ipairs(modeToggles) do
-            if t ~= modeRatio then t:Toggle(false) end
+        for _, cb in ipairs(modeCallbacks) do
+            if cb ~= modeRatioCb then cb(false) end
         end
         setMode("Ratio")
-    elseif upgradeMode == "Ratio" then
-        -- do nothing, keep Ratio mode
     end
 end, true)   -- default true
 
-modeToggles = {modeSize, modeMulti, modeSpeed, modeEat, modeRatio}
+-- Store callbacks for mutual exclusion
+local modeSizeCb, modeMultiCb, modeSpeedCb, modeEatCb, modeRatioCb
+modeSizeCb = function(enabled) modeSize:SetState(enabled) end
+modeMultiCb = function(enabled) modeMulti:SetState(enabled) end
+modeSpeedCb = function(enabled) modeSpeed:SetState(enabled) end
+modeEatCb = function(enabled) modeEat:SetState(enabled) end
+modeRatioCb = function(enabled) modeRatio:SetState(enabled) end
+
+modeCallbacks = {modeSizeCb, modeMultiCb, modeSpeedCb, modeEatCb, modeRatioCb}
 
 -- Extra toggles (only visible in Ratio mode)
 local extraSpeedToggle = upgradeSection:CreateToggle("(Ratio) Also upgrade Walkspeed", function(enabled)
@@ -806,7 +818,7 @@ local extraEatToggle = upgradeSection:CreateToggle("(Ratio) Also upgrade EatSpee
 end, false)
 extraEatToggle.Visible = (upgradeMode == "Ratio")
 
--- Ratio adjustment (simple button – you can improve later)
+-- Ratio adjustment (simple button)
 upgradeSection:CreateToggle("Set Ratio (click then type in console)", function()
     local newRatio = tonumber(game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Set Ratio", Text = "Enter new ratio (e.g. 5.5)", Duration = 5
@@ -900,13 +912,6 @@ local function startAutoUpgradeLoop()
             task.spawn(tryAutoUpgrade)
         end
     end)
-end
-
-local function stopAutoUpgradeLoop()
-    if upgradeLoopConnection then
-        upgradeLoopConnection:Disconnect()
-        upgradeLoopConnection = nil
-    end
 end
 
 startAutoUpgradeLoop()
