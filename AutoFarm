@@ -717,8 +717,8 @@ local upgradeSection = mainUI:NewSection("Auto Upgrade")
 
 local autoUpgradeEnabled = true          -- master enable/disable
 local upgradeMode = "Ratio"              -- "Size", "Multi", "Speed", "EatSpeed", "Ratio"
-local targetRatio = 5.5                  -- for Ratio mode
-local upgradeSpeedExtra = false          -- extra upgrades (Ratio only)
+local targetRatio = 5.5
+local upgradeSpeedExtra = false
 local upgradeEatSpeedExtra = false
 
 -- Master toggle
@@ -726,97 +726,75 @@ upgradeSection:CreateToggle("Auto Upgrade (Master)", function(enabled)
     autoUpgradeEnabled = enabled
 end, true)
 
--- --------------------------------------------------------------------
--- Dropdown for upgrade mode selection
-local modeDropdown = Instance.new("TextButton")
-modeDropdown.Name = "ModeDropdown"
-modeDropdown.Size = UDim2.new(1, -20, 0, 32)
-modeDropdown.Position = UDim2.new(0, 10, 0, upgradeSection.ContentY)
-modeDropdown.BackgroundColor3 = Color3.fromRGB(44, 44, 50)
-modeDropdown.Text = "Mode: Ratio 5.5"
-modeDropdown.Font = Enum.Font.Gotham
-modeDropdown.TextSize = 14
-modeDropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
-modeDropdown.TextXAlignment = Enum.TextXAlignment.Left
-modeDropdown.Parent = upgradeSection.Content
-
-local dropdownCorner = Instance.new("UICorner")
-dropdownCorner.CornerRadius = UDim.new(0, 6)
-dropdownCorner.Parent = modeDropdown
-
--- Dropdown menu (initially hidden)
-local dropdownMenu = Instance.new("ScrollingFrame")
-dropdownMenu.Size = UDim2.new(1, 0, 0, 160)
-dropdownMenu.Position = UDim2.new(0, 0, 0, 32)
-dropdownMenu.BackgroundColor3 = Color3.fromRGB(36, 36, 42)
-dropdownMenu.BackgroundTransparency = 1
-dropdownMenu.ClipsDescendants = true
-dropdownMenu.ScrollBarThickness = 3
-dropdownMenu.Parent = modeDropdown
-
-local modeOptions = {
-    { name = "Size only", value = "Size" },
-    { name = "Multiplier only", value = "Multi" },
-    { name = "Walkspeed only", value = "Speed" },
-    { name = "EatSpeed only", value = "EatSpeed" },
-    { name = "Ratio 5.5 (Size+Multi)", value = "Ratio" }
-}
-
-local function populateModeDropdown()
-    for _, child in ipairs(dropdownMenu:GetChildren()) do
-        if child:IsA("TextButton") then child:Destroy() end
-    end
-    local menuHeight = #modeOptions * 32
-    dropdownMenu.CanvasSize = UDim2.new(0, 0, 0, menuHeight)
-    dropdownMenu.BackgroundTransparency = 0
-    for i, opt in ipairs(modeOptions) do
-        local optBtn = Instance.new("TextButton")
-        optBtn.Size = UDim2.new(1, 0, 0, 32)
-        optBtn.Position = UDim2.new(0, 0, 0, (i-1)*32)
-        optBtn.BackgroundColor3 = (opt.value == upgradeMode) and Color3.fromRGB(54, 54, 60) or Color3.fromRGB(44, 44, 50)
-        optBtn.Text = opt.name
-        optBtn.Font = Enum.Font.Gotham
-        optBtn.TextSize = 14
-        optBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        optBtn.TextXAlignment = Enum.TextXAlignment.Left
-        optBtn.Parent = dropdownMenu
-        local btnCorner = Instance.new("UICorner")
-        btnCorner.CornerRadius = UDim.new(0, 4)
-        btnCorner.Parent = optBtn
-        optBtn.MouseButton1Click:Connect(function()
-            upgradeMode = opt.value
-            modeDropdown.Text = "Mode: " .. opt.name
-            dropdownMenu.BackgroundTransparency = 1
-            -- Update extra toggle visibility (only show when Ratio mode)
-            extraSpeedToggle.Visible = (upgradeMode == "Ratio")
-            extraEatToggle.Visible = (upgradeMode == "Ratio")
-            print("[Auto Upgrade] Mode set to:", upgradeMode)
-        end)
-        optBtn.MouseEnter:Connect(function()
-            optBtn.BackgroundColor3 = Color3.fromRGB(54, 54, 60)
-        end)
-        optBtn.MouseLeave:Connect(function()
-            if opt.value ~= upgradeMode then
-                optBtn.BackgroundColor3 = Color3.fromRGB(44, 44, 50)
-            else
-                optBtn.BackgroundColor3 = Color3.fromRGB(54, 54, 60)
-            end
-        end)
-    end
+-- Radio buttons for mode selection (mutually exclusive)
+local function setMode(mode)
+    upgradeMode = mode
+    -- Update extra toggle visibility
+    extraSpeedToggle.Visible = (mode == "Ratio")
+    extraEatToggle.Visible = (mode == "Ratio")
+    print("[Auto Upgrade] Mode set to:", mode)
 end
 
-modeDropdown.MouseButton1Click:Connect(function()
-    if dropdownMenu.BackgroundTransparency == 1 then
-        populateModeDropdown()
-    else
-        dropdownMenu.BackgroundTransparency = 1
+-- These toggles will turn each other off
+local modeToggles = {}
+
+local modeSize = upgradeSection:CreateToggle("Mode: Size only", function(enabled)
+    if enabled then
+        for _, t in ipairs(modeToggles) do
+            if t ~= modeSize then t:Toggle(false) end
+        end
+        setMode("Size")
+    elseif upgradeMode == "Size" then
+        setMode("Ratio")  -- fallback to Ratio if turning off the only selected
     end
-end)
+end, false)
 
--- Update ContentY after adding dropdown
-upgradeSection.ContentY = upgradeSection.ContentY + 38
+local modeMulti = upgradeSection:CreateToggle("Mode: Multiplier only", function(enabled)
+    if enabled then
+        for _, t in ipairs(modeToggles) do
+            if t ~= modeMulti then t:Toggle(false) end
+        end
+        setMode("Multi")
+    elseif upgradeMode == "Multi" then
+        setMode("Ratio")
+    end
+end, false)
 
--- --------------------------------------------------------------------
+local modeSpeed = upgradeSection:CreateToggle("Mode: Walkspeed only", function(enabled)
+    if enabled then
+        for _, t in ipairs(modeToggles) do
+            if t ~= modeSpeed then t:Toggle(false) end
+        end
+        setMode("Speed")
+    elseif upgradeMode == "Speed" then
+        setMode("Ratio")
+    end
+end, false)
+
+local modeEat = upgradeSection:CreateToggle("Mode: EatSpeed only", function(enabled)
+    if enabled then
+        for _, t in ipairs(modeToggles) do
+            if t ~= modeEat then t:Toggle(false) end
+        end
+        setMode("EatSpeed")
+    elseif upgradeMode == "EatSpeed" then
+        setMode("Ratio")
+    end
+end, false)
+
+local modeRatio = upgradeSection:CreateToggle("Mode: Ratio 5.5 (Size+Multi)", function(enabled)
+    if enabled then
+        for _, t in ipairs(modeToggles) do
+            if t ~= modeRatio then t:Toggle(false) end
+        end
+        setMode("Ratio")
+    elseif upgradeMode == "Ratio" then
+        -- do nothing, keep Ratio mode
+    end
+end, true)   -- default true
+
+modeToggles = {modeSize, modeMulti, modeSpeed, modeEat, modeRatio}
+
 -- Extra toggles (only visible in Ratio mode)
 local extraSpeedToggle = upgradeSection:CreateToggle("(Ratio) Also upgrade Walkspeed", function(enabled)
     upgradeSpeedExtra = enabled
@@ -828,11 +806,11 @@ local extraEatToggle = upgradeSection:CreateToggle("(Ratio) Also upgrade EatSpee
 end, false)
 extraEatToggle.Visible = (upgradeMode == "Ratio")
 
--- (Optional) Button to change ratio – placeholder
+-- Ratio adjustment (simple button – you can improve later)
 upgradeSection:CreateToggle("Set Ratio (click then type in console)", function()
     local newRatio = tonumber(game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Set Ratio", Text = "Enter new ratio (e.g. 5.5)", Duration = 5
-    })) -- Placeholder – replace with actual input if needed
+    }))
     if newRatio and newRatio > 0 then
         targetRatio = newRatio
         print("[Auto Upgrade] Ratio set to", targetRatio)
@@ -840,9 +818,6 @@ upgradeSection:CreateToggle("Set Ratio (click then type in console)", function()
 end, false)
 
 -- ===================== Auto Upgrade Logic =====================
--- (Keep all helper functions: getUpgradeLevel, price functions, getUpgradeCost, purchaseUpgrade)
--- (Same as before, but adjust tryAutoUpgrade to use upgradeMode)
-
 local function getUpgradeLevel(upgradeName)
     local upgrade = LocalPlayer.Upgrades:FindFirstChild(upgradeName)
     return upgrade and upgrade.Value or 0
@@ -872,7 +847,6 @@ local function purchaseUpgrade(upgradeType)
     end
 end
 
--- Main decision function
 local function tryAutoUpgrade()
     if not autoUpgradeEnabled then return end
 
@@ -895,7 +869,6 @@ local function tryAutoUpgrade()
             local cost = getUpgradeCost("MaxSize", sizeLevel)
             if tokens >= cost then purchaseUpgrade("MaxSize") return end
         end
-        -- Extra upgrades
         if upgradeSpeedExtra then
             local cost = getUpgradeCost("Speed", speedLevel)
             if tokens >= cost then purchaseUpgrade("Speed") return end
@@ -919,7 +892,6 @@ local function tryAutoUpgrade()
     end
 end
 
--- Loop control
 local upgradeLoopConnection = nil
 local function startAutoUpgradeLoop()
     if upgradeLoopConnection then return end
